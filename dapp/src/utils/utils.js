@@ -1,5 +1,4 @@
-import 'dotenv/config';
-
-export const env = {
+export const Contracts = {
+    COUNTER_CONTRACT: process.env.REACT_APP_SIMPLE_COUNTER_CONTRACT,
     FISH_NFT_CONTRACT: process.env.REACT_APP_FISH_NFT_CONTRACT,
 }

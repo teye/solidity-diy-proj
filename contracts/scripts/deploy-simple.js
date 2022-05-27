@@ -6,12 +6,12 @@
 const hre = require("hardhat");
 
 async function main() {
-    const FishNFTContract = await hre.ethers.getContractFactory("FishNFT");
-    const contract = await FishNFTContract.deploy();
+    const SimpleCounterContract = await hre.ethers.getContractFactory("SimpleCounter");
+    const contract = await SimpleCounterContract.deploy();
 
     await contract.deployed();
 
-    console.log("FishNFT deployed to: ", contract.address);
+    console.log("Simple Counter Contract deployed to: ", contract.address);
 }
 
 main()

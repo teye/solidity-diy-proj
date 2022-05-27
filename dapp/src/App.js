@@ -1,13 +1,11 @@
-// import logo from './logo.svg';
 import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 import './App.css';
 import Navbar from './components/navbar';
-import { jsonAbi } from "./abi/fishNFT";
-// import { SimpleCounterABI } from "./abi/simpleCounterABI";
 import { SimpleCounterABI as myABI } from './abi/simpleCounterABI';
 import { Contracts } from "./utils/utils"; 
-const simpleCounterABIJSON = require('./abi/simpleCounterABI.json');
+
+let provider;
 
 function App() {
   const [balance, setBalance] = useState("0");
@@ -16,14 +14,13 @@ function App() {
   const [chainId, setChainId] = useState(0);
   const [chainName, setChainName] = useState("");
 
-
   const onConnectWallet = () => {
     if (!window.ethereum) {
       console.log("Please install Metamask");
       return;
     }
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    provider = new ethers.providers.Web3Provider(window.ethereum);
     
     // MetaMask requires requesting permission to connect users accounts
     // await provider.send("eth_requestAccounts", []);
@@ -37,8 +34,8 @@ function App() {
   }
 
   const onIncrement = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     
     console.log("signer: ", signer.getAddress());
@@ -50,10 +47,9 @@ function App() {
   }
 
   const onGetNumber = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
     const deployed = new ethers.Contract(Contracts.COUNTER_CONTRACT, myABI, provider);
 
-    const data = await deployed.number();
     deployed.number()
       .then((result) => {
         setNumber(result.toString());
@@ -62,7 +58,7 @@ function App() {
   }
 
   const onResetNumber = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
     // await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     
@@ -80,11 +76,11 @@ function App() {
       return;
     }
 
-    if (!window.ethereum) {
+    if (!window.ethereum || !provider) {
       return;
     }
 
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    // const provider = new ethers.providers.Web3Provider(window.ethereum);
 
     provider.getBalance(currentAccount)
       .then((result) => {
@@ -104,7 +100,21 @@ function App() {
     <div className="max-w-full">
       <Navbar />
       <div>
-        <div className="container">
+        <div className="container mx-auto">
+          <div className="flex flex-col mt-8 items-center">
+            <div className="bg-white rounded-xl shadow-lg h-24 lg:min-w-[60rem] md:min-w-[40rem] p-4 my-4 border border-slate-300">
+              <h2 className="font-semibold text-base text-slate-900">Project 1</h2>
+              <p className="text-sm text-gray-700 mt-2">Simple counter example to learn how to call ethereum contracts and display them on frontend.</p>
+            </div>
+            <div className="bg-white rounded-xl shadow-lg h-24 lg:min-w-[60rem] md:min-w-[40rem] p-4 my-4 border border-slate-300">
+              <h2 className="font-semibold text-base text-slate-900">Project 2</h2>
+              <p className="text-sm text-gray-700 mt-2">ERC-721 example to learn about ethereum NFT</p>
+            </div>
+            <div className="bg-white rounded-xl shadow-lg h-24 lg:min-w-[60rem] md:min-w-[40rem] p-4 my-4 border border-slate-300">
+              <h2 className="font-semibold text-base text-slate-900">Project 3</h2>
+              <p className="text-sm text-gray-700 mt-2">NFT marketplace example to learn about contract to contract interactions.</p>
+            </div>
+          </div>
           <button 
             className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
             onClick={onConnectWallet}>

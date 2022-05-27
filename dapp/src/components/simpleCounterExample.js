@@ -109,7 +109,7 @@ function SimpleCounterExample() {
                     <h3 className="font-bold text-[1rem] text-blue-800 uppercase mb-2">Account Info</h3>
                     <div className="mb-4">
                       <button 
-                          className="bg-teal-500 font-semibold text-white text-sm py-2 px-4 border border-teal-500 hover:border-transparent rounded"
+                          className="bg-blue-500 font-semibold text-white text-sm py-2 px-4 border border-blue-500 hover:border-transparent rounded"
                           onClick={onConnectWallet}>
                           Connect to Metamask
                       </button>
@@ -135,17 +135,17 @@ function SimpleCounterExample() {
                   <div className="mt-4">
                     {/* contract buttons */}
                     <button 
-                        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
+                        className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
                         onClick={() => onIncrement()}>
                         Increment
                     </button>
                     <button 
-                        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
+                        className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
                         onClick={() => onGetNumber()}>
                         Get Number
                     </button>
                     <button 
-                        className="bg-red-500 text-white font-semibold py-2 px-4 border border-red-500 rounded"
+                        className="bg-red-500 text-white text-sm font-semibold py-2 px-4 border border-red-500 rounded"
                         onClick={() => onResetNumber()}>
                         Reset
                     </button>

@@ -5,6 +5,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import SimpleCounterExample from './components/simpleCounterExample';
+import NFTExample from './components/nftExample';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,6 +14,7 @@ root.render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/project1" element={<SimpleCounterExample/>} />
+        <Route path="/project2" element={<NFTExample/>} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

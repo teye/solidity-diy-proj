@@ -15,7 +15,7 @@ function Navbar() {
                         </div>
                     </div>
                     <div className="space-x-3">
-                        <a href="/" className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">Connect Metamask</a>
+                        {/* <a href="/" className="py-2 px-2 font-medium text-gray-500 rounded hover:bg-green-500 hover:text-white transition duration-300">Connect Metamask</a> */}
                     </div>
                 </div>
             </div>

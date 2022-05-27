@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+.main-div-hover:hover div {
+  background-color: #1e3a8a;
+  border-color: #1e3a8a;
+  transition: 0.3s;
+}
+
+.main-div-hover:hover h2,
+.main-div-hover:hover p {
+  color: #FFF;
+  transition: 0.3s;
+}

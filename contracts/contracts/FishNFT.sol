@@ -98,4 +98,21 @@ contract FishNFT is ERC721, ERC721Enumerable {
         fishes[arrayIdx].level++;
         emit LevelUp(msg.sender, tokenId, fishes[arrayIdx].level);
     }
+
+    /*
+    * @notice fetch a list of Fish struct
+    * @param  address owner     token ID owner address
+    */
+    function getFishesOwned(address _owner) public view returns(Fish[] memory) {
+        uint totalOwned = ERC721.balanceOf(_owner);
+        Fish[] memory fishesOfOwner = new Fish[](totalOwned);
+        uint i;
+
+        for (i = 0; i < totalOwned; i++) {
+            uint tokenId = ERC721Enumerable.tokenOfOwnerByIndex(_owner, i);
+            uint arrayIdx = tokenId - 1;
+            fishesOfOwner[i] = fishes[arrayIdx];
+        }
+        return fishesOfOwner;
+    }
 }

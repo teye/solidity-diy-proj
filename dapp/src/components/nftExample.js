@@ -13,6 +13,7 @@ let provider;
  */
 function NFTExample() {
     const [currentAccount, setCurrentAccount] = useState("");
+    const speciesList = ["GUPPY", "GOLDFISH", "SHARK"];
 
     const onConnectWallet = async () => {
         if (!window.ethereum) {
@@ -32,6 +33,23 @@ function NFTExample() {
     }
 
     /**
+     * retrieve a random species name for onMint
+     * if array is empty, return the default species
+     * for proper randomness should use proper secure randomness or do it via oracle in contract level
+     * @returns species name
+     */
+    const getRandomSpecies = () => {
+        if (speciesList.length === 0) {
+            // default species
+            return "GUPPY";
+        }
+        const min = 0;
+        const max = speciesList.length - 1;
+        const randomIndex = Math.floor(Math.random() * (max - min + 1) + min); // inclusive of min and max
+        return speciesList[randomIndex];
+    }
+
+    /**
      * call mintFish()
      * each minting costs 0.001 eth
      */
@@ -42,7 +60,9 @@ function NFTExample() {
         console.log("deployed: ", deployed);
 
         try {
-            const tx = await deployed.mintFish("happy", {
+            const randomSpecies = getRandomSpecies();
+
+            const tx = await deployed.mintFish(randomSpecies, {
                 value: ethers.utils.parseEther("0.001")
             });
             console.log("tx: ", tx.hash);

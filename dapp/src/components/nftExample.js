@@ -13,6 +13,18 @@ let provider;
  */
 function NFTExample() {
     const [currentAccount, setCurrentAccount] = useState("");
+
+    /**
+     * list of Fish struct that user owns
+     * [
+     *   {
+     *     species:
+     *     tokenId:
+     *     level:
+     *   }
+     * ]
+     */
+    const [ownedFishList, setOwnedFishList] = useState([]);
     const speciesList = ["GUPPY", "GOLDFISH", "SHARK"];
 
     const onConnectWallet = async () => {
@@ -26,7 +38,9 @@ function NFTExample() {
         // MetaMask requires requesting permission to connect users accounts
         try {
             const accounts = await provider.send("eth_requestAccounts", []);
-            setCurrentAccount(accounts[0]);
+            if (accounts.length > 0 && currentAccount !== accounts[0]) {
+                setCurrentAccount(accounts[0]);
+            }
         } catch(e) {
             console.error(e);
         }
@@ -75,15 +89,17 @@ function NFTExample() {
      * call levelUp()
      * each levelling costs 0.002 eth
      * require tokenId
+     * @param string tokenId
      */
-    const onLevelUp = async () => {
+    const onLevelUp = async (tokenId) => {
         await onConnectWallet();
         const signer = provider.getSigner();
         const deployed = new ethers.Contract(Contracts.FISH_NFT_CONTRACT, FISHNFTABI, signer);
         console.log("deployed: ", deployed);
 
         try {
-            const tx = await deployed.levelUp(1, {
+            const tx = await deployed.levelUp(
+                tokenId.toString(), {
                 value: ethers.utils.parseEther("0.002")
             });
     
@@ -91,6 +107,42 @@ function NFTExample() {
         } catch (e) {
             console.error(e);
         }
+    }
+
+    const onFetchOwnedNFT = async () => {
+        await onConnectWallet();
+
+        if (!currentAccount) {
+            return;
+        }
+
+        const deployed = new ethers.Contract(Contracts.FISH_NFT_CONTRACT, FISHNFTABI, provider);
+
+        console.log(deployed);
+
+        // const owned = await deployed.balanceOf(currentAccount);
+
+        // const balanceOf = parseInt(owned.toString());
+
+        // console.log(owned.toNumber());
+
+        // for (let j = 0; j < owned.toNumber(); j++) {
+        //     const tokenID = await deployed.tokenOfOwnerByIndex(currentAccount, j);
+        //     console.log(`token owner: ${currentAccount}, token ID: ${tokenID}`);
+        // }
+        const fishList = await deployed.getFishesOwned(currentAccount);
+
+        let result = [];
+
+        for (const fish of fishList) {
+            console.log("fish: ", fish);
+            result.push({
+                species: fish.species,
+                tokenId: fish.tokenId.toString(),
+                level: fish.level,
+            })
+        }
+        setOwnedFishList([...result]);
     }
 
     return (
@@ -105,6 +157,28 @@ function NFTExample() {
                 currentAccount &&
                 <div>Wallet: {currentAccount}</div>
             }
+            {
+                ownedFishList.length
+            }
+            {
+                ownedFishList.length === 0 ?
+                <div>No fishes found for current wallet.</div>
+                :
+                ownedFishList.map((item, index) => {
+                    return (
+                        <div key={index} className="my-4">
+                            <p>Fish ID: {item.tokenId}</p>
+                            <p>Fish Species: {item.species}</p>
+                            <p>Fish Level: {item.level}</p>
+                            <button 
+                                className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
+                                onClick={() => onLevelUp(item.tokenId)}>
+                                Level Up
+                            </button>
+                        </div>
+                    )
+                })
+            }
             {/* contract buttons */}
             <div className="mt-4">
                 <button 
@@ -114,8 +188,8 @@ function NFTExample() {
                 </button>
                 <button 
                     className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
-                    onClick={() => onLevelUp()}>
-                    Level up a Fish
+                    onClick={() => onFetchOwnedNFT()}>
+                    Fetch User NFT
                 </button>
             </div>
         </div>

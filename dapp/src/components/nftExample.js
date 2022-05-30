@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { ethers } from 'ethers';
 import { Contracts } from "../utils/utils";
 import { FISHNFTABI } from "../abi/fishNFTABI";
+import toast from 'react-hot-toast';
 import Card from './card';
 
 
@@ -38,6 +39,7 @@ function NFTExample() {
     const onConnectWallet = async () => {
         if (!window.ethereum) {
           console.log("Please install Metamask");
+          toast.error("Please install Metamask");
           return;
         }
     
@@ -71,6 +73,23 @@ function NFTExample() {
         return speciesList[randomIndex];
     }
 
+    // diplay notifications
+    const notify = (event, txHash) => {
+        toast(
+            <div className='h-full text-[0.8em] text-white'>
+                <div className="font-semibold tracking-wide">{event} Submitted!</div>
+                <div className='break-all pt-1'><span className='font-semibold'>Tx:</span> {txHash}</div>
+            </div>,
+            {
+                style: {
+                    color: '#ffffaa',
+                    backgroundColor: '#171717'
+                },
+                duration: 8000,
+            }
+        );
+    }
+
     /**
      * call mintFish()
      * each minting costs 0.001 eth
@@ -88,6 +107,7 @@ function NFTExample() {
                 value: ethers.utils.parseEther("0.001")
             });
             console.log("tx: ", tx.hash);
+            notify("Mint", tx.hash)
         } catch (e) {
             console.error(e);
         }
@@ -112,6 +132,7 @@ function NFTExample() {
             });
     
             console.log("tx: ", tx.hash);
+            notify("Level Up", tx.hash)
         } catch (e) {
             console.error(e);
         }

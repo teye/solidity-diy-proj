@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { ethers } from 'ethers';
 import { Contracts } from "../utils/utils";
 import { FISHNFTABI } from "../abi/fishNFTABI";
+import Card from './card';
 
 
 let provider;
@@ -26,6 +27,13 @@ function NFTExample() {
      */
     const [ownedFishList, setOwnedFishList] = useState([]);
     const speciesList = ["GUPPY", "GOLDFISH", "SHARK"];
+
+    const [loading, setLoading] = useState(false);
+
+    /**
+     * delay time on purpose, e.g. to simulate loading
+     */
+    const delay = ms => new Promise(res => setTimeout(res, ms));
 
     const onConnectWallet = async () => {
         if (!window.ethereum) {
@@ -109,41 +117,77 @@ function NFTExample() {
         }
     }
 
-    const onFetchOwnedNFT = async () => {
+    const onFetchOwnedNFT = useCallback(async () => {
         await onConnectWallet();
 
         if (!currentAccount) {
             return;
         }
 
+        // simluate loading
+        setLoading(true);
+        await delay(2000);
+
         const deployed = new ethers.Contract(Contracts.FISH_NFT_CONTRACT, FISHNFTABI, provider);
 
         console.log(deployed);
 
-        // const owned = await deployed.balanceOf(currentAccount);
-
-        // const balanceOf = parseInt(owned.toString());
-
-        // console.log(owned.toNumber());
-
-        // for (let j = 0; j < owned.toNumber(); j++) {
-        //     const tokenID = await deployed.tokenOfOwnerByIndex(currentAccount, j);
-        //     console.log(`token owner: ${currentAccount}, token ID: ${tokenID}`);
-        // }
-        const fishList = await deployed.getFishesOwned(currentAccount);
-
         let result = [];
 
-        for (const fish of fishList) {
-            console.log("fish: ", fish);
-            result.push({
-                species: fish.species,
-                tokenId: fish.tokenId.toString(),
-                level: fish.level,
-            })
+        try {
+            const fishList = await deployed.getFishesOwned(currentAccount);
+
+            for (const fish of fishList) {
+                console.log("fish: ", fish);
+                result.push({
+                    species: fish.species,
+                    tokenId: fish.tokenId.toString(),
+                    level: fish.level,
+                })
+            }
+
+            setOwnedFishList([...result]);
+        } catch (e) {
+            console.error(e);
+        } finally {
+            setLoading(false);
         }
-        setOwnedFishList([...result]);
-    }
+
+        // eslint-disable-next-line
+    }, [currentAccount]);
+
+    useEffect(() => {
+        // update owned fish
+        onFetchOwnedNFT();
+    }, [onFetchOwnedNFT]);
+
+    useEffect(() => {
+        // listen for contract events
+        if (!window.ethereum) return;
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        
+        const fishContract = new ethers.Contract(Contracts.FISH_NFT_CONTRACT, FISHNFTABI, provider);
+
+        // contract event must be listened after the current block
+        // https://github.com/ethers-io/ethers.js/issues/2310
+
+        fishContract.on("LevelUp", (from, tokenId, level) => {
+            console.log(`levelup event detected - sender: ${from}, token id: ${tokenId}, new level: ${level}`);
+            onFetchOwnedNFT();
+        });
+
+        fishContract.on("MintFish", (from, species, tokenId) => {
+            console.log(`mint event detected - sender: ${from}, species: ${species}, token id: ${tokenId}`);
+            onFetchOwnedNFT();
+        });
+
+        return () => {
+            fishContract.removeListener("LevelUp");
+            fishContract.removeListener("MintFish");
+        }
+
+    }, [onFetchOwnedNFT]);
 
     return (
         <div className="container mx-auto">
@@ -155,43 +199,52 @@ function NFTExample() {
             </button>
             {
                 currentAccount &&
-                <div>Wallet: {currentAccount}</div>
-            }
-            {
-                ownedFishList.length
-            }
-            {
-                ownedFishList.length === 0 ?
-                <div>No fishes found for current wallet.</div>
-                :
-                ownedFishList.map((item, index) => {
-                    return (
-                        <div key={index} className="my-4">
-                            <p>Fish ID: {item.tokenId}</p>
-                            <p>Fish Species: {item.species}</p>
-                            <p>Fish Level: {item.level}</p>
-                            <button 
-                                className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
-                                onClick={() => onLevelUp(item.tokenId)}>
-                                Level Up
-                            </button>
-                        </div>
-                    )
-                })
+                <div className='mt-4'><strong>Wallet</strong>: {currentAccount}</div>
             }
             {/* contract buttons */}
             <div className="mt-4">
-                <button 
-                    className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
-                    onClick={() => onMint()}>
-                    Mint a Fish
-                </button>
-                <button 
-                    className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
-                    onClick={() => onFetchOwnedNFT()}>
-                    Fetch User NFT
-                </button>
+                {
+                    !currentAccount ?
+                    <p>Please connect your Metamask to mint a fish.</p>
+                    :
+                    <button 
+                        className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
+                        onClick={() => onMint()}>
+                        Mint a Fish
+                    </button>
+                }
             </div>
+            <div className='my-4'>
+                <strong>No. of fishes you owned</strong>: {ownedFishList.length}
+            </div>
+            {
+                loading ?
+                
+                <div>Fetching fishes...</div>
+                
+                :
+
+                ownedFishList.length === 0 ?
+                <div>No fishes found for current wallet.</div>
+                
+                :
+                <div className='grid grid-cols-4 gap-4'>
+                    {
+                        ownedFishList.map((item, index) => {
+                            return (
+                                <Card 
+                                    key={index}
+                                    species={item.species}
+                                    tokenId={item.tokenId}
+                                    level={item.level}
+                                    onLevelUp={onLevelUp}
+                                />
+                            )
+                        })
+                    }
+                </div>
+
+            }
         </div>
     );
 }

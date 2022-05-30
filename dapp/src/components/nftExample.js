@@ -213,6 +213,15 @@ function NFTExample() {
     return (
         <div className="container mx-auto">
             <h1 className="font-semibold text-3xl my-4">"What The Fish": ERC-721 Example</h1>
+            <h2 className="font-semibold text-lg text-blue-800 mb-2">Instructions</h2>
+            <p>This is a ERC-721 contract about fishes! There are three types of fishes to mint; "Guppy", "Goldfish" and "Shark". You can train each of the fish to increase their levels!</p>
+            <ol className="list-decimal mt-4 ml-4">
+                <li>Click on "Connect to Metamask" and view your fishes.</li>
+                <li>Click on "Mint a Fish" to mint a fish to your wallet.</li>
+                <li>Click on "Train" to level up your fish!</li>
+                <li>Mint more and train more!</li>
+            </ol>
+            <p className="mt-4 mb-8">Note: <em>If you change account on Metamask, click on "Connect to Metamask" to reload.</em></p>
             <button 
                 className="bg-blue-500 font-semibold text-white text-sm py-2 px-4 border border-blue-500 hover:border-transparent rounded"
                 onClick={onConnectWallet}>
@@ -220,10 +229,15 @@ function NFTExample() {
             </button>
             {
                 currentAccount &&
-                <div className='mt-4'><strong>Wallet</strong>: {currentAccount}</div>
+                <div>
+                    <div className='my-4'><strong>Wallet</strong>: {currentAccount}</div>
+                    <div className='mb-4'>
+                        <strong>No. of fishes you owned</strong>: {ownedFishList.length}
+                    </div>
+                </div>
             }
             {/* contract buttons */}
-            <div className="mt-4">
+            <div className="my-4">
                 {
                     !currentAccount ?
                     <p>Please connect your Metamask to mint a fish.</p>
@@ -234,9 +248,6 @@ function NFTExample() {
                         Mint a Fish
                     </button>
                 }
-            </div>
-            <div className='my-4'>
-                <strong>No. of fishes you owned</strong>: {ownedFishList.length}
             </div>
             {
                 loading ?
@@ -249,7 +260,7 @@ function NFTExample() {
                 <div>No fishes found for current wallet.</div>
                 
                 :
-                <div className='grid grid-cols-4 gap-4'>
+                <div className='grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 mb-8'>
                     {
                         ownedFishList.map((item, index) => {
                             return (

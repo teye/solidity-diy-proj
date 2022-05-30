@@ -237,7 +237,7 @@ function NFTExample() {
                 </div>
             }
             {/* contract buttons */}
-            <div className="my-4">
+            <div className="mt-4 mb-8">
                 {
                     !currentAccount ?
                     <p>Please connect your Metamask to mint a fish.</p>
@@ -249,6 +249,7 @@ function NFTExample() {
                     </button>
                 }
             </div>
+            <div className="font-semibold text-lg text-blue-800 mb-2">My Aquarium</div>
             {
                 loading ?
                 

@@ -5,7 +5,7 @@ function Navbar() {
     return (
         <nav className="bg-white z-100 max-w-full">
             <div className="mx-auto p-4 h-16">
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center font-play">
                     <div className="flex space-x-7">
                         {/* website logo & name */}
                         <div>
@@ -17,7 +17,7 @@ function Navbar() {
                         </div>
                         {/* nav links */}
                         <div>
-                            <ul className="inline-flex mt-[0.8em] text-xs text-gray-500 font-medium uppercase">
+                            <ul className="inline-flex mt-[0.6em] text-[0.85em] text-gray-500 font-medium uppercase">
                                 <li className="tracking-wider mr-6">
                                     <Link to={"/project1"} className="hover:text-blue-600 transition">
                                         Counter Example

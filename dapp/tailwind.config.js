@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       fontFamily: {
         'sans': ['Open Sans', ...defaultTheme.fontFamily.sans],
+        'play': ['Play', 'sans-serif'],
       }
     },
   },

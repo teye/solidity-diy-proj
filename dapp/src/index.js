@@ -6,18 +6,21 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import SimpleCounterExample from './components/simpleCounterExample';
 import NFTExample from './components/nftExample';
+import LayoutDefault from './components/layout';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/project1" element={<SimpleCounterExample/>} />
-        <Route path="/project2" element={<NFTExample/>} />
-      </Routes>
-    </BrowserRouter>
-  </React.StrictMode>
+    <React.StrictMode>
+      <BrowserRouter>
+        <LayoutDefault>
+          <Routes>
+            <Route path="/" element={<App />} />
+            <Route path="/project1" element={<SimpleCounterExample/>} />
+            <Route path="/project2" element={<NFTExample/>} />
+          </Routes>
+          </LayoutDefault>
+      </BrowserRouter>
+    </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

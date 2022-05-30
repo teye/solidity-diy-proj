@@ -1,4 +1,3 @@
-import Navbar from "./navbar";
 import { useState } from 'react';
 import { ethers } from 'ethers';
 import { Contracts } from "../utils/utils";
@@ -75,32 +74,29 @@ function NFTExample() {
     }
 
     return (
-        <div className="max-w-full">
-            <Navbar />
-            <div className="container mx-auto">
-                <h1 className="font-semibold text-3xl my-4">"What The Fish": ERC-721 Example</h1>
+        <div className="container mx-auto">
+            <h1 className="font-semibold text-3xl my-4">"What The Fish": ERC-721 Example</h1>
+            <button 
+                className="bg-blue-500 font-semibold text-white text-sm py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+                onClick={onConnectWallet}>
+                Connect to Metamask
+            </button>
+            {
+                currentAccount &&
+                <div>Wallet: {currentAccount}</div>
+            }
+            {/* contract buttons */}
+            <div className="mt-4">
                 <button 
-                    className="bg-blue-500 font-semibold text-white text-sm py-2 px-4 border border-blue-500 hover:border-transparent rounded"
-                    onClick={onConnectWallet}>
-                    Connect to Metamask
+                    className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
+                    onClick={() => onMint()}>
+                    Mint a Fish
                 </button>
-                {
-                    currentAccount &&
-                    <div>Wallet: {currentAccount}</div>
-                }
-                {/* contract buttons */}
-                <div className="mt-4">
-                    <button 
-                        className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
-                        onClick={() => onMint()}>
-                        Mint a Fish
-                    </button>
-                    <button 
-                        className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
-                        onClick={() => onLevelUp()}>
-                        Level up a Fish
-                    </button>
-                </div>
+                <button 
+                    className="bg-transparent hover:bg-blue-500 text-blue-700 text-sm font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded mr-4"
+                    onClick={() => onLevelUp()}>
+                    Level up a Fish
+                </button>
             </div>
         </div>
     );

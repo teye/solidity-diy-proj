@@ -1,9 +1,11 @@
-# solidity-diy-proj
+# Solidity Self-Study Project
 A DIY project to learn Solidity.
 
 There are 2 examples: (1) Simple Counter and (2) NFT Example.
 
-The project uses Metamask and Hardhat. Please install Metamask on your browser.
+The project uses Metamask and Hardhat. 
+
+Please install Metamask on your browser.
 
 ## Simple Counter
 

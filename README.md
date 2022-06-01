@@ -68,6 +68,8 @@ Configure your Metamask to connect to the hardhat node at **`localhost:8485`**. 
 
 Read the instructions on the page to meddle with the contract.
 
+**Note**: Reset your account nonce if Metamask complains about nonce issues.
+
 ## NFT Example
 
 A contract based on ERC-721 and ERC-721 extensions specifications.
@@ -133,6 +135,8 @@ Browse to http://localhost:3000 and click on "NFT Example".
 Configure your Metamask to connect to the hardhat node at **`localhost:8485`**. Change the `chainID` to **`31337`**.
 
 Read the instructions on the page to meddle with the contract.
+
+**Note**: Reset your account nonce if Metamask complains about nonce issues.
 
 
 ## Testing Smart Contracts

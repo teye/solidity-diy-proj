@@ -28,11 +28,11 @@ function Navbar() {
                                         NFT Example
                                     </Link>
                                 </li>
-                                <li className="tracking-wider">
+                                {/* <li className="tracking-wider">
                                     <Link to={"/project3"} className="hover:text-blue-600 transition">
                                         Marketplace Example
                                     </Link>
-                                </li>
+                                </li> */}
                             </ul>
                         </div>
                     </div>

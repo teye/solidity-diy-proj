@@ -19,12 +19,6 @@ function App() {
               <p className="text-sm text-gray-700 mt-2">ERC-721 example to learn about ethereum NFT.</p>
             </div>
           </Link>
-          <Link to={"/project3"} className="main-div-hover">
-            <div className="bg-white rounded-xl shadow-lg p-10 my-4 border border-slate-300 w-full">
-              <h2 className="font-medium text-base text-slate-900">Project 3: Marketplace</h2>
-              <p className="text-sm text-gray-700 mt-2">NFT marketplace example to learn about contract to contract interactions.</p>
-            </div>
-          </Link>
         </div>
       </div>
     </div>

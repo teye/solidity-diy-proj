@@ -160,8 +160,15 @@ npx hardhat console --network localhost
 
 const Fish = await ethers.getContractFactory('FishNFT');
 
+>> undefined
+
 // attach object to deployed contract
 const fish = await Fish.attach('0x5FbDB2315678afecb367f032d93F642f64180aa3');
+
+>> undefined
+
+// mint fish
+await fish.mintFish("GUPPY", {value: ethers.utils.parseEther('0.01')});
 
 // get fishes[0] information
 await fish.fishes(0);
